@@ -4,14 +4,14 @@ import Link from "next/link";
 import useStore from "./fetchDriversAsync";
 
 export default function Drivers() {
-  const fetchDrivers = useStore((state) => state.fetchDrivers);
   const driverList = useStore((state) => state.drivers);
-  const removeDriver = useStore((state) => state.removeDriver);
   const loading = useStore((state) => state.loading);
 
-  // useEffect(() => {
-  //   setInterval(fetchDrivers, 1000);
-  // }, [fetchDrivers]);
+  function deUmlaut(value) {
+    value = value.toLowerCase();
+    value = value.replace(/ü/g, "u");
+    return value;
+  }
 
   if (loading) {
     return <div>Loading ...</div>;
@@ -40,11 +40,7 @@ export default function Drivers() {
                 <div className="mt-4 flex justify-between">
                   <div>
                     <h3 className="text-sm text-gray-700">
-                      <Link
-                        href={`/drivers/${encodeURIComponent(
-                          familyName
-                        ).toLowerCase()}`}
-                      >
+                      <Link href={`/drivers/${deUmlaut(familyName)}`}>
                         <a>
                           <span
                             aria-hidden="true"

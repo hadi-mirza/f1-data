@@ -3,26 +3,43 @@ import { useRouter } from "next/router";
 import useStore from "./fetchDriversAsync";
 import { useEffect } from "react";
 
-export default function Post(props) {
+export default function Driver() {
   const driverList = useStore((state) => state.drivers);
+  const fetchDrivers = useStore((state) => state.fetchDrivers);
+  const setDrivers = useStore((state) => state.setDrivers);
   const loading = useStore((state) => state.loading);
   const router = useRouter();
   const { id } = router.query;
 
-  // let obj = driverList.filter((driver) => {
-  //   return driver.driverId === id;
-  // });
+  // if data exists in localStorage, use it else fetch data from API
+  useEffect(() => {
+    if (localStorage.getItem("drivers")) {
+      const drivers = JSON.parse(localStorage.getItem("drivers"));
+      setDrivers(drivers);
+    } else {
+      fetchDrivers();
+    }
+  }, [fetchDrivers]);
 
-  // useEffect(() => {
-  //   console.log(obj);
-  // }, []);
+  // get driver by id
+  const driver = driverList.find((driver) => driver.driverId === id);
 
-  console.log(driverList);
+  // destructure driver
+  // const { driverId, givenName, familyName, dateOfBirth, nationality } = driver;
 
   return (
     <div>
-      <h1>Test</h1>
-      {id}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div key={driver.driverId}>
+          <h2>
+            {driver.givenName} {driver.familyName}
+          </h2>
+          <p>{driver.nationality}</p>
+          <p>{driver.dateOfBirth}</p>
+        </div>
+      )}
     </div>
   );
 }
