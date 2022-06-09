@@ -8,8 +8,9 @@ export default function Drivers() {
   const loading = useStore((state) => state.loading);
 
   function deUmlaut(value) {
-    value = value.toLowerCase();
+    // value = value.toLowerCase();
     value = value.replace(/ü/g, "u");
+    value = value.replace(/é/g, "e");
     return value;
   }
 
@@ -26,17 +27,34 @@ export default function Drivers() {
 
         <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {driverList.map((driver) => {
-            const { givenName, familyName, permanentNumber } = driver;
+            let {
+              givenName,
+              familyName,
+              familyName: altName,
+              permanentNumber,
+            } = driver;
 
-            const string = `${givenName.charAt(0)}/${givenName
-              .substring(0, 3)
-              .toUpperCase()}${familyName
-              .substring(0, 3)
-              .toUpperCase()}01_${givenName}_${familyName}/${givenName
-              .substring(0, 3)
-              .toLowerCase()}${familyName.substring(0, 3).toLowerCase()}01`;
+            if (altName === "Latifi") {
+              altName = "Laf";
+            } else if (altName === "Pérez") {
+              altName = "Perez";
+            } else if (altName === "Hülkenberg") {
+              altName = "Hulkenberg";
+            }
 
-            const url = `https://www.formula1.com/content/dam/fom-website/drivers/${string}.png`;
+            let string = `${givenName.charAt(0)}/${givenName
+              .substring(0, 3)
+              .toUpperCase()}${altName.substring(0, 3).toUpperCase()}${
+              givenName === "Mick" ? "02" : "01"
+            }_${givenName}_${familyName}/${givenName
+              .substring(0, 3)
+              .toLowerCase()}${familyName.substring(0, 3).toLowerCase()}${
+              givenName === "Mick" ? "02" : "01"
+            }`;
+
+            string = deUmlaut(string);
+
+            let url = `https://www.formula1.com/content/dam/fom-website/drivers/${string}.png`;
 
             return (
               <div key={permanentNumber} className="group relative">
@@ -50,7 +68,9 @@ export default function Drivers() {
                 <div className="mt-4 flex justify-between">
                   <div>
                     <h3 className="text-sm text-gray-700">
-                      <Link href={`/drivers/${deUmlaut(familyName)}`}>
+                      <Link
+                        href={`/drivers/${deUmlaut(familyName).toLowerCase()}`}
+                      >
                         <a>
                           <span
                             aria-hidden="true"
@@ -59,10 +79,6 @@ export default function Drivers() {
                           {givenName} {familyName}
                         </a>
                       </Link>
-                      {/* <a href={driver.href}>
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {givenName} {familyName}
-                      </a> */}
                     </h3>
                     <p className="mt-1 text-sm text-gray-500">{driver.color}</p>
                   </div>
