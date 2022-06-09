@@ -28,11 +28,21 @@ export default function Drivers() {
           {driverList.map((driver) => {
             const { givenName, familyName, permanentNumber } = driver;
 
+            const string = `${givenName.charAt(0)}/${givenName
+              .substring(0, 3)
+              .toUpperCase()}${familyName
+              .substring(0, 3)
+              .toUpperCase()}01_${givenName}_${familyName}/${givenName
+              .substring(0, 3)
+              .toLowerCase()}${familyName.substring(0, 3).toLowerCase()}01`;
+
+            const url = `https://www.formula1.com/content/dam/fom-website/drivers/${string}.png`;
+
             return (
               <div key={permanentNumber} className="group relative">
                 <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
                   <img
-                    src={`https://www.formula1.com/content/fom-website/en/drivers/sergio-perez/_jcr_content/image.img.1536.medium.jpg/1646819228700.jpg`}
+                    src={url}
                     alt={driver.imageAlt}
                     className="w-full h-full object-center object-cover lg:w-full lg:h-full"
                   />

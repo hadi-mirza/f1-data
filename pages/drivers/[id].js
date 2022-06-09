@@ -18,10 +18,10 @@ export default function Driver() {
       setDrivers(drivers);
     } else {
       fetchDrivers();
+      localStorage.setItem("drivers", JSON.stringify(driverList));
     }
   }, [fetchDrivers]);
 
-  // get driver by id
   const driver = driverList.find((driver) => driver.driverId === id);
 
   // destructure driver
