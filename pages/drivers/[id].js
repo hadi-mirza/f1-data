@@ -11,21 +11,8 @@ export default function Driver() {
   const router = useRouter();
   const { id } = router.query;
 
-  // if data exists in localStorage, use it else fetch data from API
-  useEffect(() => {
-    if (localStorage.getItem("drivers")) {
-      const drivers = JSON.parse(localStorage.getItem("drivers"));
-      setDrivers(drivers);
-    } else {
-      fetchDrivers();
-      localStorage.setItem("drivers", JSON.stringify(driverList));
-    }
-  }, [fetchDrivers]);
-
   const driver = driverList.find((driver) => driver.driverId === id);
-
-  // destructure driver
-  // const { driverId, givenName, familyName, dateOfBirth, nationality } = driver;
+  console.log(id);
 
   return (
     <div>
@@ -33,6 +20,13 @@ export default function Driver() {
         <p>Loading...</p>
       ) : (
         <div key={driver.driverId}>
+          <img
+            // get the image url from localStorage
+            src={localStorage.getItem(
+              `driver_images:${driver?.givenName}_${driver?.familyName}`
+            )}
+            className="w-150 h-auto"
+          />
           <h2>
             {driver.givenName} {driver.familyName}
           </h2>

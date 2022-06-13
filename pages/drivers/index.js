@@ -54,14 +54,23 @@ export default function Drivers() {
 
             string = deUmlaut(string);
 
-            let url = `https://www.formula1.com/content/dam/fom-website/drivers/${string}.png`;
+            const url = `https://www.formula1.com/content/dam/fom-website/drivers/${string}.png`;
+
+            //for each driver, add the image url to localStorage
+            localStorage.setItem(
+              `driver_images: ${givenName}_${familyName}`,
+              url
+            );
 
             return (
               <div key={permanentNumber} className="group relative">
                 <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
                   <img
-                    src={url}
-                    alt={driver.imageAlt}
+                    // get the image url from localStorage
+                    src={localStorage.getItem(
+                      `driver_images:${givenName}_${familyName}`
+                    )}
+                    alt={`${givenName} ${familyName}`}
                     className="w-full h-full object-center object-cover lg:w-full lg:h-full"
                   />
                 </div>
